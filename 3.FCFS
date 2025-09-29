@@ -8,15 +8,14 @@ int main() {
     printf("Enter number of processes: ");
     scanf("%d", &n);
 
-    // Input burst times
     printf("Enter burst time for each process:\n");
     for (i = 0; i < n; i++) {
         printf("P%d: ", i + 1);
         scanf("%d", &bt[i]);
-        p[i] = i + 1; // store process IDs
+        p[i] = i + 1; 
     }
 
-    // Sort processes by burst time (SJF)
+    
     for (i = 0; i < n - 1; i++) {
         for (j = i + 1; j < n; j++) {
             if (bt[i] > bt[j]) {
@@ -31,19 +30,18 @@ int main() {
         }
     }
 
-    // First process
+    
     wt[0] = 0;
     ct[0] = bt[0];
     tat[0] = ct[0];
-
-    // Calculate for other processes
+    
     for (i = 1; i < n; i++) {
         wt[i] = wt[i - 1] + bt[i - 1];
         ct[i] = ct[i - 1] + bt[i];
         tat[i] = wt[i] + bt[i];
     }
 
-    // Display results
+    
     printf("\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\tCompletion Time\n");
     for (i = 0; i < n; i++) {
         printf("P%d\t%d\t\t%d\t\t%d\t\t%d\n", p[i], bt[i], wt[i], tat[i], ct[i]);
@@ -51,9 +49,56 @@ int main() {
         avg_tat += tat[i];
     }
 
-    // Print averages
+
     printf("\nAverage Waiting Time = %.2f", avg_wt / n);
     printf("\nAverage Turnaround Time = %.2f\n", avg_tat / n);
 
     return 0;
 }
+#include <stdio.h>
+
+int main() {
+    int n, i;
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    int pid[n], arrival[n], burst[n], completion[n], turnaround[n], waiting[n];
+    int sumBT = 0;
+
+   
+    for (i = 0; i < n; i++) {
+        pid[i] = i + 1;
+        printf("Enter arrival time for P%d: ", pid[i]);
+        scanf("%d", &arrival[i]);
+        printf("Enter burst time for P%d: ", pid[i]);
+        scanf("%d", &burst[i]);
+    }
+
+    int time = 0;
+    for (i = 0; i < n; i++) {
+        if (time < arrival[i])
+            time = arrival[i];  // CPU idle until process arrives
+        completion[i] = time + burst[i];
+        turnaround[i] = completion[i] - arrival[i];
+        waiting[i] = turnaround[i] - burst[i];
+        time = completion[i];
+    }
+
+    
+    printf("\nPID\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n");
+    for (i = 0; i < n; i++) {
+        printf("P%d\t%d\t%d\t%d\t\t%d\t\t%d\n", pid[i], arrival[i], burst[i], completion[i], turnaround[i], waiting[i]);
+    }
+
+    float totalTAT = 0, totalWT = 0;
+    for (i = 0; i < n; i++) {
+        totalTAT += turnaround[i];
+        totalWT += waiting[i];
+    }
+
+    printf("\nAverage Turnaround Time = %.2f", totalTAT / n);
+    printf("\nAverage Waiting Time = %.2f\n", totalWT / n);
+
+    return 0;
+}
+
