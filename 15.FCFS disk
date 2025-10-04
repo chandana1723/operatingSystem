@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int queue[20], n, head, i, total = 0;
+    float avg;
+
+    printf("Enter the number of disk requests: ");
+    scanf("%d", &n);
+
+    printf("Enter the request sequence: ");
+    for (i = 0; i < n; i++)
+        scanf("%d", &queue[i]);
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("\nSequence of head movement:\n%d", head);
+    for (i = 0; i < n; i++) {
+        printf(" -> %d", queue[i]);
+        total += abs(queue[i] - head);
+        head = queue[i];
+    }
+
+    avg = (float)total / n;
+    printf("\n\nTotal head movement = %d", total);
+    printf("\nAverage head movement = %.2f\n", avg);
+
+    return 0;
+}
