@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main() {
+    int fd;
+    char buffer[100];
+
+    // Create and open file
+    fd = open("file1.txt", O_CREAT | O_WRONLY, 0644);
+    write(fd, "Hello UNIX File Management\n", 27);
+    close(fd);
+
+    // Open file for reading
+    fd = open("file1.txt", O_RDONLY);
+    read(fd, buffer, 27);
+    buffer[27] = '\0';
+    printf("File Content: %s\n", buffer);
+    close(fd);
+
+    // Delete file
+    unlink("file1.txt");
+    return 0;
+}
