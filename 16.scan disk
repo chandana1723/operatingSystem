@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int queue[20], n, head, i, j, total = 0, temp;
+    int disk_size, direction;
+
+    printf("Enter the number of requests: ");
+    scanf("%d", &n);
+
+    printf("Enter the request sequence: ");
+    for (i = 0; i < n; i++)
+        scanf("%d", &queue[i]);
+
+    printf("Enter initial head position: ");
+    scanf("%d", &head);
+
+    printf("Enter total disk size: ");
+    scanf("%d", &disk_size);
+
+    printf("Enter head movement direction (1 for high, 0 for low): ");
+    scanf("%d", &direction);
+
+    // Adding head to queue
+    queue[n] = head;
+    n++;
+
+    // Sort the queue
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (queue[i] > queue[j]) {
+                temp = queue[i];
+                queue[i] = queue[j];
+                queue[j] = temp;
+            }
+        }
+    }
+
+    int pos;
+    for (i = 0; i < n; i++) {
+        if (queue[i] == head) {
+            pos = i;
+            break;
+        }
+    }
+
+    printf("\nSequence of head movement:\n%d", head);
+
+    if (direction == 1) { // Moving towards higher end
+        for (i = pos + 1; i < n; i++) {
+            printf(" -> %d", queue[i]);
+            total += abs(queue[i] - head);
+            head = queue[i];
+        }
+        if (head != disk_size - 1) {
+            total += abs((disk_size - 1) - head);
+            head = disk_size - 1;
+        }
+        for (i = pos - 1; i >= 0; i--) {
+            printf(" -> %d", queue[i]);
+            total += abs(queue[i] - head);
+            head = queue[i];
+        }
+    } 
+    else { // Moving towards lower end
+        for (i = pos - 1; i >= 0; i--) {
+            printf(" -> %d", queue[i]);
+            total += abs(queue[i] - head);
+            head = queue[i];
+        }
+        if (head != 0) {
+            total += abs(head - 0);
+            head = 0;
+        }
+        for (i = pos + 1; i < n; i++) {
+            printf(" -> %d", queue[i]);
+            total += abs(queue[i] - head);
+            head = queue[i];
+        }
+    }
+
+    printf("\n\nTotal head movement = %d", total);
+
+    return 0;
+}
