@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+int main() {
+    int n, start[10], length[10], i, j, k, m, flag = 0;
+    int blocks[50] = {0}; // 0 means free, 1 means allocated
+
+    printf("Enter number of files: ");
+    scanf("%d", &n);
+
+    for (i = 0; i < n; i++) {
+        printf("\nEnter the starting block and length of file %d: ", i + 1);
+        scanf("%d %d", &start[i], &length[i]);
+
+        flag = 0;
+        for (j = start[i]; j < (start[i] + length[i]); j++) {
+            if (blocks[j] == 1) {
+                flag = 1;
+                break;
+            }
+        }
+
+        if (flag == 0) {
+            for (j = start[i]; j < (start[i] + length[i]); j++) {
+                blocks[j] = 1;
+            }
+            printf("File %d allocated successfully.\n", i + 1);
+        } else {
+            printf("File %d cannot be allocated. Block %d already in use.\n", i + 1, j);
+        }
+    }
+
+    printf("\nFile\tStart\tLength\tBlocks Allocated\n");
+    for (i = 0; i < n; i++) {
+        printf("%d\t%d\t%d\t", i + 1, start[i], length[i]);
+        for (j = start[i]; j < (start[i] + length[i]); j++) {
+            if (blocks[j] == 1)
+                printf("%d ", j);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
